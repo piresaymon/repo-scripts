@@ -35,10 +35,9 @@ def search(item):
     if subtitles_list:
         for it in subtitles_list:
             listitem = xbmcgui.ListItem(label=it["language_name"],
-                                        label2=it["filename"],
-                                        iconImage=str(it["rating"]),
-                                        thumbnailImage=it["language_flag"]
-                                        )
+                                        label2=it["filename"])
+            listitem.setArt({'icon': str(it["rating"]), 'thumb': it["language_flag"]})
+
             if it["sync"]:
                 listitem.setProperty("sync", "true")
             else:
@@ -158,5 +157,10 @@ elif params['action'] == 'download':
     for sub in subs:
         listitem = xbmcgui.ListItem(label=sub)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sub, listitem=listitem, isFolder=False)
+
+elif params['action'] == 'login':
+    helper = NapisyHelper()
+    helper.login(True)
+    __addon__.openSettings()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))  ## send end of directory to XBMC
